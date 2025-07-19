@@ -1,7 +1,7 @@
 // @title User Microservice API
 // @version 1.0
 // @description This is a user microservice.
-// @host localhost:8082
+// @host localhost:8081
 // @BasePath /api
 
 package main
@@ -9,6 +9,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	userhttp "user-ms/internal/user/adapter/http"
 	"user-ms/internal/user/adapter/mongo"
@@ -18,10 +19,17 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 
-	_ "user-ms/docs" // ✅ Swagger docs
+	_ "user-ms/docs"
 
 	httpSwagger "github.com/swaggo/http-swagger"
 )
+
+func init() {
+	// Load environment variables from .env file
+	if err := godotenv.Load(); err != nil {
+		log.Println("⚠️  No .env file found or error loading .env")
+	}
+}
 
 func main() {
 	if err := godotenv.Load(); err != nil {
@@ -45,7 +53,12 @@ func main() {
 		handler.RegisterRoutes(r)
 	})
 
-	log.Println("🚀 User service running at http://localhost:8082")
-	log.Println("📄 Swagger UI available at http://localhost:8082/swagger/index.html")
-	log.Fatal(http.ListenAndServe(":8082", r))
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("PORT is not set in the environment")
+	}
+
+	log.Printf("🚀 Server running at http://localhost:%s\n", port)
+	log.Fatal(http.ListenAndServe(":"+port, r))
+
 }

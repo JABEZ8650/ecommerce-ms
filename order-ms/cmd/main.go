@@ -10,7 +10,7 @@
 // @license.name  MIT License
 // @license.url   https://opensource.org/licenses/MIT
 
-// @host      localhost:8081
+// @host      localhost:8083
 // @BasePath  /api
 // @schemes   http
 package main
@@ -18,6 +18,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	orderhttp "order-ms/internal/order/adapter/http"
 	"order-ms/internal/order/adapter/mongo"
@@ -30,6 +31,13 @@ import (
 
 	_ "order-ms/docs"
 )
+
+func init() {
+	// Load environment variables from .env file
+	if err := godotenv.Load(); err != nil {
+		log.Println("⚠️  No .env file found or error loading .env")
+	}
+}
 
 func main() {
 	if err := godotenv.Load(); err != nil {
@@ -51,6 +59,11 @@ func main() {
 		handler.RegisterRoutes(r)
 	})
 
-	log.Println("Order service running at http://localhost:8081")
-	log.Fatal(http.ListenAndServe(":8081", r))
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("PORT is not set in the environment")
+	}
+
+	log.Printf("🚀 Server running at http://localhost:%s\n", port)
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }

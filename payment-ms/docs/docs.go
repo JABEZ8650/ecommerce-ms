@@ -17,14 +17,13 @@ const docTemplate = `{
     "paths": {
         "/payments": {
             "get": {
-                "description": "Get all payments",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "payments"
                 ],
-                "summary": "Get all payments",
+                "summary": "List all payments",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -38,7 +37,6 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Create a new payment",
                 "consumes": [
                     "application/json"
                 ],
@@ -68,13 +66,7 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
+                        "description": "Invalid request",
                         "schema": {
                             "type": "string"
                         }
@@ -84,7 +76,6 @@ const docTemplate = `{
         },
         "/payments/{id}": {
             "get": {
-                "description": "Get payment by ID",
                 "produces": [
                     "application/json"
                 ],
@@ -109,7 +100,7 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "Not Found",
+                        "description": "Payment not found",
                         "schema": {
                             "type": "string"
                         }
@@ -117,7 +108,6 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update a payment",
                 "consumes": [
                     "application/json"
                 ],
@@ -127,7 +117,7 @@ const docTemplate = `{
                 "tags": [
                     "payments"
                 ],
-                "summary": "Update a payment",
+                "summary": "Update payment status",
                 "parameters": [
                     {
                         "type": "string",
@@ -137,12 +127,15 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Updated Payment Data",
-                        "name": "payment",
+                        "description": "New Status",
+                        "name": "status",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.UpdatePaymentRequest"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 ],
@@ -152,23 +145,10 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/domain.Payment"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
                     }
                 }
             },
             "delete": {
-                "description": "Delete a payment",
                 "tags": [
                     "payments"
                 ],
@@ -184,13 +164,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "204": {
-                        "description": "No Content",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "No Content"
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Error deleting",
                         "schema": {
                             "type": "string"
                         }
@@ -204,24 +181,24 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "amount",
+                "method",
                 "order_id",
-                "status",
                 "user_id"
             ],
             "properties": {
                 "amount": {
                     "type": "number"
                 },
-                "order_id": {
-                    "type": "string"
-                },
-                "status": {
+                "method": {
                     "type": "string",
                     "enum": [
-                        "paid",
-                        "pending",
-                        "failed"
+                        "credit_card",
+                        "paypal",
+                        "bank_transfer"
                     ]
+                },
+                "order_id": {
+                    "type": "string"
                 },
                 "user_id": {
                     "type": "string"
@@ -230,58 +207,28 @@ const docTemplate = `{
         },
         "domain.Payment": {
             "type": "object",
-            "required": [
-                "amount",
-                "order_id",
-                "status",
-                "user_id"
-            ],
             "properties": {
                 "amount": {
                     "type": "number"
                 },
-                "created_at": {
-                    "type": "integer"
+                "createdAt": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "string"
                 },
-                "order_id": {
+                "orderId": {
                     "type": "string"
                 },
                 "status": {
-                    "type": "string",
-                    "enum": [
-                        "paid",
-                        "pending",
-                        "failed"
-                    ]
-                },
-                "updated_at": {
-                    "type": "integer"
-                },
-                "user_id": {
+                    "description": "e.g., \"pending\", \"completed\", \"failed\"",
                     "type": "string"
-                }
-            }
-        },
-        "domain.UpdatePaymentRequest": {
-            "type": "object",
-            "required": [
-                "amount",
-                "status"
-            ],
-            "properties": {
-                "amount": {
-                    "type": "number"
                 },
-                "status": {
-                    "type": "string",
-                    "enum": [
-                        "paid",
-                        "pending",
-                        "failed"
-                    ]
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
                 }
             }
         }

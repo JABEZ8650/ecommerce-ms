@@ -11,9 +11,9 @@ type PaymentRepository interface {
 }
 
 type PaymentUseCase interface {
-	CreatePayment(ctx context.Context, req CreatePaymentRequest) (*Payment, error)
+	CreatePayment(ctx context.Context, req *CreatePaymentRequest) (*Payment, error)
 	GetPaymentByID(ctx context.Context, id string) (*Payment, error)
 	GetAllPayments(ctx context.Context) ([]*Payment, error)
-	UpdatePayment(ctx context.Context, id string, req UpdatePaymentRequest) (*Payment, error)
+	UpdatePayment(ctx context.Context, id string, req *UpdatePaymentRequest) (*Payment, error)
 	DeletePayment(ctx context.Context, id string) error
 }

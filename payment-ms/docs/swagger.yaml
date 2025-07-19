@@ -4,61 +4,39 @@ definitions:
     properties:
       amount:
         type: number
-      order_id:
-        type: string
-      status:
+      method:
         enum:
-        - paid
-        - pending
-        - failed
+        - credit_card
+        - paypal
+        - bank_transfer
+        type: string
+      order_id:
         type: string
       user_id:
         type: string
     required:
     - amount
+    - method
     - order_id
-    - status
     - user_id
     type: object
   domain.Payment:
     properties:
       amount:
         type: number
-      created_at:
-        type: integer
+      createdAt:
+        type: string
       id:
         type: string
-      order_id:
+      orderId:
         type: string
       status:
-        enum:
-        - paid
-        - pending
-        - failed
+        description: e.g., "pending", "completed", "failed"
         type: string
-      updated_at:
-        type: integer
-      user_id:
+      updatedAt:
         type: string
-    required:
-    - amount
-    - order_id
-    - status
-    - user_id
-    type: object
-  domain.UpdatePaymentRequest:
-    properties:
-      amount:
-        type: number
-      status:
-        enum:
-        - paid
-        - pending
-        - failed
+      userId:
         type: string
-    required:
-    - amount
-    - status
     type: object
 host: localhost:8084
 info:
@@ -69,7 +47,6 @@ info:
 paths:
   /payments:
     get:
-      description: Get all payments
       produces:
       - application/json
       responses:
@@ -79,13 +56,12 @@ paths:
             items:
               $ref: '#/definitions/domain.Payment'
             type: array
-      summary: Get all payments
+      summary: List all payments
       tags:
       - payments
     post:
       consumes:
       - application/json
-      description: Create a new payment
       parameters:
       - description: Payment Data
         in: body
@@ -101,11 +77,7 @@ paths:
           schema:
             $ref: '#/definitions/domain.Payment'
         "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
+          description: Invalid request
           schema:
             type: string
       summary: Create a new payment
@@ -113,7 +85,6 @@ paths:
       - payments
   /payments/{id}:
     delete:
-      description: Delete a payment
       parameters:
       - description: Payment ID
         in: path
@@ -123,17 +94,14 @@ paths:
       responses:
         "204":
           description: No Content
-          schema:
-            type: string
         "500":
-          description: Internal Server Error
+          description: Error deleting
           schema:
             type: string
       summary: Delete a payment
       tags:
       - payments
     get:
-      description: Get payment by ID
       parameters:
       - description: Payment ID
         in: path
@@ -148,7 +116,7 @@ paths:
           schema:
             $ref: '#/definitions/domain.Payment'
         "404":
-          description: Not Found
+          description: Payment not found
           schema:
             type: string
       summary: Get payment by ID
@@ -157,19 +125,20 @@ paths:
     put:
       consumes:
       - application/json
-      description: Update a payment
       parameters:
       - description: Payment ID
         in: path
         name: id
         required: true
         type: string
-      - description: Updated Payment Data
+      - description: New Status
         in: body
-        name: payment
+        name: status
         required: true
         schema:
-          $ref: '#/definitions/domain.UpdatePaymentRequest'
+          additionalProperties:
+            type: string
+          type: object
       produces:
       - application/json
       responses:
@@ -177,15 +146,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domain.Payment'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Update a payment
+      summary: Update payment status
       tags:
       - payments
 swagger: "2.0"

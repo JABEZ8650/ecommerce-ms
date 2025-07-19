@@ -2,6 +2,8 @@ package usecase
 
 import (
 	"context"
+	"time"
+
 	"payment-ms/internal/payment/domain"
 )
 
@@ -13,11 +15,14 @@ func NewPaymentUseCase(repo domain.PaymentRepository) domain.PaymentUseCase {
 	return &paymentUseCase{repo: repo}
 }
 
-func (uc *paymentUseCase) CreatePayment(ctx context.Context, req domain.CreatePaymentRequest) (*domain.Payment, error) {
+func (uc *paymentUseCase) CreatePayment(ctx context.Context, req *domain.CreatePaymentRequest) (*domain.Payment, error) {
 	payment := &domain.Payment{
-		OrderID: req.OrderID,
-		Amount:  req.Amount,
-		Status:  req.Status,
+		UserID:    req.UserID,
+		OrderID:   req.OrderID,
+		Amount:    req.Amount,
+		Status:    "pending", // default status
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 	return uc.repo.CreatePayment(ctx, payment)
 }
@@ -30,12 +35,12 @@ func (uc *paymentUseCase) GetAllPayments(ctx context.Context) ([]*domain.Payment
 	return uc.repo.GetAllPayments(ctx)
 }
 
-func (uc *paymentUseCase) UpdatePayment(ctx context.Context, id string, req domain.UpdatePaymentRequest) (*domain.Payment, error) {
-	payment := &domain.Payment{
-		Amount: req.Amount,
+func (uc *paymentUseCase) UpdatePayment(ctx context.Context, id string, req *domain.UpdatePaymentRequest) (*domain.Payment, error) {
+	updated := &domain.Payment{
 		Status: req.Status,
+		Amount: req.Amount,
 	}
-	return uc.repo.UpdatePayment(ctx, id, payment)
+	return uc.repo.UpdatePayment(ctx, id, updated)
 }
 
 func (uc *paymentUseCase) DeletePayment(ctx context.Context, id string) error {

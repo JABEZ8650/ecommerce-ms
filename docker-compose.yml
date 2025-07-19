@@ -1,0 +1,66 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - ecommerce-net
+
+  user-ms:
+    build: ./user-ms
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+    networks:
+      - ecommerce-net
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - DB_NAME=ecommerce
+
+  product-ms:
+    build: ./product-ms
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mongo
+    networks:
+      - ecommerce-net
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - DB_NAME=ecommerce
+
+  order-ms:
+    build: ./order-ms
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mongo
+    networks:
+      - ecommerce-net
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - DB_NAME=ecommerce
+
+  payment-ms:
+    build: ./payment-ms
+    ports:
+      - "8084:8084"
+    depends_on:
+      - mongo
+    networks:
+      - ecommerce-net
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - DB_NAME=ecommerce
+
+volumes:
+  mongo-data:
+
+networks:
+  ecommerce-net:

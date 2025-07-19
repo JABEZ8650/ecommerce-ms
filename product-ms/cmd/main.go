@@ -10,7 +10,7 @@
 // @license.name  MIT License
 // @license.url   https://opensource.org/licenses/MIT
 
-// @host      localhost:8080
+// @host      localhost:8082
 // @BasePath  /api
 
 // @schemes http
@@ -19,6 +19,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
@@ -33,6 +34,13 @@ import (
 	"product-ms/internal/product/usecase"
 	"product-ms/pkg/config"
 )
+
+func init() {
+	// Load environment variables from .env file
+	if err := godotenv.Load(); err != nil {
+		log.Println("⚠️  No .env file found or error loading .env")
+	}
+}
 
 func main() {
 	// Load env
@@ -63,6 +71,10 @@ func main() {
 		handler.RegisterRoutes(r)
 	})
 
-	log.Println(" Server running at http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("PORT is not set in the environment")
+	}
+	log.Printf("🚀 Server running at http://localhost:%s\n", port)
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }
