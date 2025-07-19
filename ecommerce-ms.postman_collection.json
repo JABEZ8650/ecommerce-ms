@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1a13986a-d6a8-4677-8fc3-3e8237b89e6c",
+		"_postman_id": "03429ea6-6256-4a75-bad7-58dfbedef69d",
 		"name": "ecommerce-ms",
 		"description": "Postman test collection for User, Product, Order, and Payment microservices.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -154,7 +154,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/api/users",
+							"raw": "http://localhost:8082/api/products",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -162,7 +162,7 @@
 							"port": "8082",
 							"path": [
 								"api",
-								"users"
+								"products"
 							]
 						}
 					},
@@ -170,8 +170,11 @@
 				},
 				{
 					"name": "Create Product",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -189,7 +192,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/users",
+							"raw": "http://localhost:8082/api/products",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -197,7 +200,7 @@
 							"port": "8082",
 							"path": [
 								"api",
-								"users"
+								"products"
 							],
 							"query": [
 								{
@@ -231,7 +234,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/users/{ID}",
+							"raw": "http://localhost:8082/api/products/{ID}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -239,7 +242,7 @@
 							"port": "8082",
 							"path": [
 								"api",
-								"users",
+								"products",
 								"{ID}"
 							],
 							"query": [
@@ -259,7 +262,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/api/users/{id}",
+							"raw": "http://localhost:8082/api/products/{id}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -267,7 +270,7 @@
 							"port": "8082",
 							"path": [
 								"api",
-								"users",
+								"products",
 								"{id}"
 							]
 						}
@@ -280,7 +283,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/api/users/{Id}",
+							"raw": "http://localhost:8082/api/products/{Id}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -288,7 +291,7 @@
 							"port": "8082",
 							"path": [
 								"api",
-								"users",
+								"products",
 								"{Id}"
 							]
 						}
@@ -306,7 +309,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8083/api/products",
+							"raw": "http://localhost:8083/api/orders",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -314,7 +317,7 @@
 							"port": "8083",
 							"path": [
 								"api",
-								"products"
+								"orders"
 							]
 						}
 					},
@@ -326,7 +329,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8083/api/products/{id}",
+							"raw": "http://localhost:8083/api/orders/{id}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -334,7 +337,7 @@
 							"port": "8083",
 							"path": [
 								"api",
-								"products",
+								"orders",
 								"{id}"
 							]
 						}
@@ -362,7 +365,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8083/api/products",
+							"raw": "http://localhost:8083/api/orders",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -370,7 +373,7 @@
 							"port": "8083",
 							"path": [
 								"api",
-								"products"
+								"orders"
 							]
 						}
 					},
@@ -397,7 +400,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8083/api/products/{id}",
+							"raw": "http://localhost:8083/api/orders/{id}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -405,7 +408,7 @@
 							"port": "8083",
 							"path": [
 								"api",
-								"products",
+								"orders",
 								"{id}"
 							]
 						}
@@ -418,7 +421,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8083/api/products",
+							"raw": "http://localhost:8083/api/orders",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -426,7 +429,7 @@
 							"port": "8083",
 							"path": [
 								"api",
-								"products"
+								"orders"
 							]
 						}
 					},
